@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Love.exe - For You ❤️</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
+        body {
+            background: #000;
+            color: #ff66b2;
+            font-family: 'Press Start 2P', cursive;
+            text-align: center;
+            margin: 0;
+            overflow: scroll;
+            height: 100vh;
+        }
+
+        /* Love Terminal UI */
+        .terminal {
+            background: rgba(0, 0, 0, 0.8);
+            border: 2px solid #ff66b2;
+            padding: 10px;
+            border-radius: 10px;
+            width: 80%;
+            margin: 20px auto;
+            color: #ff66b2;
+            font-size: 16px;
+        }
+
+        .button {
+            background: #ff66b2;
+            border: none;
+            color: white;
+            padding: 10px;
+            font-size: 14px;
+            cursor: pointer;
+            margin: 5px;
+            border-radius: 5px;
+            font-family: 'Press Start 2P', cursive;
+        }
+
+        /* Love Messages */
+        .message-box {
+            background: rgba(255, 102, 178, 0.2);
+            padding: 10px;
+            border-radius: 10px;
+            display: inline-block;
+            margin: 10px;
+        }
+
+        /* Floating Hearts */
+        .heart {
+            position: absolute;
+            color: red;
+            font-size: 20px;
+            animation: fall linear infinite;
+        }
+
+        @keyframes fall {
+            0% { transform: translateY(-100vh); }
+            100% { transform: translateY(100vh); }
+        }
+
+        /* Love Photos */
+        .photo-frame {
+            border: 5px solid #ff66b2;
+            padding: 5px;
+            display: block;
+            margin: 20px auto;
+            border-radius: 15px;
+            width: 150px; /* Reduced size of photos */
+            display: none; /* Initially hide the photo */
+        }
+
+        /* Proposal Box */
+        .proposal-box {
+            background: rgba(255, 102, 178, 0.2);
+            padding: 20px;
+            border-radius: 10px;
+            width: 80%;
+            margin: 20px auto;
+            font-size: 18px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>💖 Welcome to Love.exe 💖</h1>
+    <p class="message-box">This is my digital love letter to you! 💕</p>
+
+    <button class="button" onclick="showReason()">Why Do I Like You?</button>
+    <p id="love-reason"></p>
+
+    <div class="terminal">
+        <p>💻 AtangGPT: Click a question</p>
+        <button class="button" onclick="showResponse('You, my love! 💕')">Who is the best?</button>
+        <button class="button" onclick="showResponse('Processing... Confirmed: 100%! 💖')">How much do you love me?</button>
+        <button class="button" onclick="showMemory()">Show a memory</button>
+        <p id="commandOutput"></p>
+        <img id="memory-photo" class="photo-frame">
+    </div>
+
+    <!-- Proposal Section -->
+    <div class="proposal-box">
+        <h2>💌 I Haven’t Properly Asked You…</h2>
+        <p>So here it is...</p>
+        <h3>Will you be my girl? 🥺❤️</h3>
+        <button class="button" onclick="propose('Yes')">Yes</button>
+        <button class="button" onclick="propose('No')">No</button>
+        <p id="proposal-response"></p>
+    </div>
+
+    <!-- Hidden Form to Capture Response -->
+    <form id="formspreeForm" action="https://formspree.io/f/xrbpbaez" method="POST" style="display: none;">
+        <input type="hidden" name="interaction" id="interaction">
+    </form>
+
+    <!-- Background Music -->
+    <audio id="loveSong" autoplay loop>
+        <source src="song/bryson-tiller-song.mpeg" type="audio/mpeg">
+    </audio>
+
+    <script>
+        // Love Reasons
+        const reasons = [
+            "I love the way you make me feel when we're together. There's a special energy between us that always brightens my day. I cherish our moments.",
+            "I admire your personality and how genuine you are. You have a beautiful soul, and I love how you stay true to yourself no matter what.",
+            "Your laughter and smile are my favorite things. Every time I see you smile or hear your laugh, it makes me feel so happy and lucky to be around you.",
+            "I feel comfortable and at peace when I'm with you. You make me feel safe, and I can be myself without judgment. That means a lot to me.",
+            "I appreciate the way you care about others. It's clear to me how much kindness and compassion you show to the people in your life. It's one of the reasons I’m drawn to you."
+        ];
+
+        function showReason() {
+            let randomReason = reasons[Math.floor(Math.random() * reasons.length)];
+            document.getElementById("love-reason").innerText = randomReason;
+        }
+
+        // Love Chatbot (Button Click)
+        function showResponse(message) {
+            document.getElementById("commandOutput").innerText = message;
+        }
+
+        // Memories (With Photos & Explanation)
+        const memories = [
+            { img: "images/photo1.png", text: "Remember this day? I couldn't stop looking at you. You were glowing ✨" },
+            { img: "images/photo2.jpeg", text: "This moment was special. We laughed so much, I swear I fell deeper in love ❤️" },
+            { img: "images/photo3.png", text: "One of my favorite days. Just me, you, and a whole lot of love 😘" }
+        ];
+
+        let memoryIndex = 0;
+
+        function showMemory() {
+            let memory = memories[memoryIndex];
+            const memoryPhoto = document.getElementById("memory-photo");
+            memoryPhoto.src = memory.img;
+            memoryPhoto.style.display = "block"; // Show the photo when needed
+            document.getElementById("commandOutput").innerText = memory.text;
+
+            memoryIndex = (memoryIndex + 1) % memories.length;
+        }
+
+        // Proposal Logic
+        function propose(choice) {
+            let response;
+            if (choice === "Yes") {
+                response = "YAY! 🥰💕 You just made my heart overload with happiness!";
+            } else {
+                response = "😢 Well... I’ll keep trying until you say yes!";
+            }
+            document.getElementById("proposal-response").innerText = response;
+
+            // Send response to Formspree
+            sendToFormspree("Proposal Response", choice);
+        }
+
+        // Send response to Formspree
+        function sendToFormspree(type, value) {
+            document.getElementById("interaction").value = `${type}: ${value}`;
+            document.getElementById("formspreeForm").submit();
+        }
+
+        // Floating Hearts
+        function createHeart() {
+            const heart = document.createElement("div");
+            heart.innerHTML = "❤️";
+            heart.classList.add("heart");
+            heart.style.left = Math.random() * 100 + "vw";
+            heart.style.animationDuration = Math.random() * 2 + 3 + "s";
+            document.body.appendChild(heart);
+            setTimeout(() => { heart.remove(); }, 5000);
+        }
+        setInterval(createHeart, 300);
+    </script>
+
+</body>
+</html>
